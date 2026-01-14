@@ -16,8 +16,9 @@ useKeyboardShortcut({
 
 <template>
   <!-- Searchbar -->
-  <div @click="isPaletteOpen = true" class="absolute top-4 right-10 text-muted text-sm px-4 py-2 bg-background hover:bg-highlight group/searchbar transform-gpu duration-100 ease-in-out rounded-full flex items-center gap-4 cursor-pointer">
-    <MagnifyingGlassIcon class="w-4 h-4"/>
+  <div @click="isPaletteOpen = true"
+    class="absolute top-4 left-0 right-0 m-auto w-fit text-muted text-xs md:text-sm px-4 py-2 bg-background hover:bg-highlight group/searchbar transform-gpu duration-100 ease-in-out rounded-full flex items-center gap-4 cursor-pointer">
+    <MagnifyingGlassIcon class="w-4 h-4" />
     Type a command or serach...
     <div class="flex gap-1">
       <span v-for="(key, index) in cmdPaletteShortcut" :key="index"
@@ -27,7 +28,7 @@ useKeyboardShortcut({
   </div>
 
   <!-- Command Palette Trigger Indicator -->
-  <div class="flex gap-10">
+  <div class="flex gap-4 md:gap-6 text-sm md:text-base">
     Open command palette
     <div class="flex gap-1">
       <span v-for="(key, index) in cmdPaletteShortcut" :key="index"

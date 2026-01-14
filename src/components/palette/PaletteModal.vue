@@ -133,18 +133,18 @@ const handleConfimation = () => {
 
 <template>
     <div @click.self="$emit('close')"
-        class="w-screen h-[100dvh] absolute top-0 left-0 bg-background/30 flex items-center justify-center z-1000">
+        class="w-screen h-[100dvh] p-4 absolute top-0 left-0 bg-background/30 flex items-center justify-center z-1000">
 
         <!-- confirmation modal -->
         <div v-if="showConfirmModal" key="confirm_modal"
-            class="bg-background w-[480px] rounded-2xl overflow-hidden border border-highlight">
+            class="bg-background w-full md:w-[480px] rounded-2xl overflow-hidden border border-highlight">
             <ConfirmModal :confirmationData="confirmModalData" @confirm="handleConfimation"
                 @close="showConfirmModal = false" />
         </div>
 
         <!-- command palette modal -->
         <div v-else key="command_palette"
-            class="bg-background w-[600px] rounded-2xl overflow-hidden border border-highlight">
+            class="bg-background w-full md:w-[600px] rounded-2xl overflow-hidden border border-highlight">
             <PaletteInput v-model="searchQuery" class="border-b-2 border-solid border-highlight" />
             <PaletteList ref="listRef" :commands="filteredCommands" @execute="handleExecution" />
         </div>

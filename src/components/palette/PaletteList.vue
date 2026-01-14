@@ -48,9 +48,9 @@ const executeSelected = () => {
     emit('execute', selectedCommand);
     pressedIndex.value = selectedIndex.value
 
-  setTimeout(() => {
-    pressedIndex.value = null
-  }, 60)
+    setTimeout(() => {
+      pressedIndex.value = null
+    }, 60)
   }
 };
 
@@ -62,30 +62,45 @@ defineExpose({
 </script>
 
 <template>
-  <div class="palette-list-container h-[400px] w-full overflow-x-hidden overflow-y-auto p-2 outline-none focus:outline-none" ref="listContainer" tabindex="0">
-    <TransitionGroup name="list" tag="div" class="flex flex-col">
-      <ul key="list">
+  <div
+    class="palette-list-container relative h-[400px] w-full overflow-x-hidden overflow-y-auto scroll-smooth p-2 outline-none focus:outline-none"
+    ref="listContainer" tabindex="0">
+    <TransitionGroup name="list" tag="ul" class="flex relative list-none flex-col">
 
-        <PaletteItem v-for="(command, index) in commands" :key="command.id" :command="command"
-          :isActive="index === selectedIndex" @click="$emit('execute', command)" @mouseenter="selectedIndex = index"
-          :class="[pressedIndex === index ? 'scale-[0.99]' : '']" />
-      </ul>
+      <PaletteItem v-for="(command, index) in commands" :key="command.id" :command="command"
+        :isActive="index === selectedIndex" @click="$emit('execute', command)" @mouseenter="selectedIndex = index"
+        :class="[pressedIndex === index ? 'scale-[0.99]' : '']" />
 
-      <PaletteEmpty v-if="commands.length === 0" key="empty" />
+      <li>
+        <PaletteEmpty v-if="commands.length === 0" key="empty" />
+      </li>
     </TransitionGroup>
   </div>
 </template>
 
 <style scoped>
-.list-move,
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.2s ease-in-out;
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.list-enter-from,
+.list-move {
+  transition: transform 150ms ease;
+}
+
+.list-enter-from {
+  opacity: 0;
+  transform: translateY(10impx);
+}
+
 .list-leave-to {
   opacity: 0;
-  transform: translateY(10px);
+  transform: scale(0.95);
+}
+
+.list-leave-active {
+  position: absolute;
+  width: calc(100% - 1rem);
+  z-index: 0;
 }
 </style>
