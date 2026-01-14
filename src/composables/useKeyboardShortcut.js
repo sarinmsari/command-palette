@@ -17,7 +17,6 @@ export function useKeyboardShortcut(keyMap, options = {}) {
 
     const isGlobalKey = key === 'k' && isMod; // Key to toggle globally
 
-    console.log(options)
     if (!isGlobalKey && !options.isEnabled) return; // Do not process if not enabled and not global key
     
     if (keyMap[key]) {
@@ -26,8 +25,7 @@ export function useKeyboardShortcut(keyMap, options = {}) {
       if (mod && !isMod) return; // Require mod key but it's not pressed
       if (!mod && isMod) return; // Do not require mod key but it's pressed
 
-      event.preventDefault();
-      handler(); // Execute the handler
+      handler(event); // Execute the handler
     }
   };
 

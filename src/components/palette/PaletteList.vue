@@ -4,14 +4,14 @@ import PaletteItem from './PaletteItem.vue';
 import PaletteEmpty from './PaletteEmpty.vue';
 
 const props = defineProps({
-  commands: { type: Array, required: true },
-  searchQuery: { type: String, default: '' }
+  commands: { type: Array, required: true }
 });
 
 const emit = defineEmits(['execute']);
 
 const selectedIndex = ref(0);
 const listContainer = ref(null);
+const pressedIndex = ref(0);
 
 watch(() => props.commands, () => {
   selectedIndex.value = 0;
@@ -46,6 +46,11 @@ const executeSelected = () => {
   const selectedCommand = props.commands[selectedIndex.value];
   if (selectedCommand) {
     emit('execute', selectedCommand);
+    pressedIndex.value = selectedIndex.value
+
+  setTimeout(() => {
+    pressedIndex.value = null
+  }, 60)
   }
 };
 
@@ -57,15 +62,16 @@ defineExpose({
 </script>
 
 <template>
-  <div class="palette-list-container min-h-[400px] overflow-y-auto p-2 outline-none focus:outline-none" ref="listContainer" tabindex="0">
-    <TransitionGroup name="list" tag="div" class="flex flex-col gap-1">
+  <div class="palette-list-container h-[400px] w-full overflow-x-hidden overflow-y-auto p-2 outline-none focus:outline-none" ref="listContainer" tabindex="0">
+    <TransitionGroup name="list" tag="div" class="flex flex-col">
       <ul key="list">
 
         <PaletteItem v-for="(command, index) in commands" :key="command.id" :command="command"
-          :isActive="index === selectedIndex" @click="$emit('execute', command)" @mouseenter="selectedIndex = index" />
+          :isActive="index === selectedIndex" @click="$emit('execute', command)" @mouseenter="selectedIndex = index"
+          :class="[pressedIndex === index ? 'scale-[0.99]' : '']" />
       </ul>
 
-      <PaletteEmpty v-if="commands.length === 0" key="empty" :query="searchQuery" />
+      <PaletteEmpty v-if="commands.length === 0" key="empty" />
     </TransitionGroup>
   </div>
 </template>
@@ -74,12 +80,12 @@ defineExpose({
 .list-move,
 .list-enter-active,
 .list-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.2s ease-in-out;
 }
 
 .list-enter-from,
 .list-leave-to {
   opacity: 0;
-  transform: translateX(10px);
+  transform: translateY(10px);
 }
 </style>

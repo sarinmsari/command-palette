@@ -2,18 +2,31 @@
 import { ref } from 'vue';
 import PaletteModal from './components/palette/PaletteModal.vue';
 import { useKeyboardShortcut } from './composables/useKeyboardShortcut'
+import { MagnifyingGlassIcon } from '@heroicons/vue/24/outline';
 
 const isPaletteOpen = ref(false);
 const cmdPaletteShortcut = ['⌘', 'k'];
 
 useKeyboardShortcut({
-  k: { mod: true, handler: () => { isPaletteOpen.value = !isPaletteOpen.value; } }
-},{
+  k: { mod: true, handler: (event) => { event.preventDefault(); isPaletteOpen.value = !isPaletteOpen.value; } }
+}, {
   isEnabled: isPaletteOpen.value,
 });
 </script>
 
 <template>
+  <!-- Searchbar -->
+  <div @click="isPaletteOpen = true" class="absolute top-4 right-10 text-muted text-sm px-4 py-2 bg-background hover:bg-highlight group/searchbar transform-gpu duration-100 ease-in-out rounded-full flex items-center gap-4 cursor-pointer">
+    <MagnifyingGlassIcon class="w-4 h-4"/>
+    Type a command or serach...
+    <div class="flex gap-1">
+      <span v-for="(key, index) in cmdPaletteShortcut" :key="index"
+        class="bg-highlight group-hover/searchbar:bg-background py-0.5 px-2 rounded-md text-[10px]">{{
+          key }}</span>
+    </div>
+  </div>
+
+  <!-- Command Palette Trigger Indicator -->
   <div class="flex gap-10">
     Open command palette
     <div class="flex gap-1">
@@ -22,6 +35,8 @@ useKeyboardShortcut({
           key }}</span>
     </div>
   </div>
+
+  <!-- Command Palette Modal -->
   <Transition name="fade-slide">
     <PaletteModal v-if="isPaletteOpen" @close="isPaletteOpen = false" />
   </Transition>
