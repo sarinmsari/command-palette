@@ -33,7 +33,17 @@ The interaction model is designed to be intuitive for "power users," heavily ins
 | **Arrow Left / Backspace** | Go back one step (only when search input is empty) |
 | **Enter** | Execute command or enter sub-menu |
 
+## Command Architecture
 
+### Commands with Submenu
+* `Search Workspace`
+* `Appearance Settings`
+* `Advanced Settings`
+
+### Commands Requiring Confirmation
+* `Log Out`
+* `Advanced Settings` > `Regenerate API Key`
+* `Advanced Settings` > `Delete Workspace`
 
 ## Technical Tradeoffs & Decisions
 
