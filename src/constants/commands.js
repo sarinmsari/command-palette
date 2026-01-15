@@ -41,7 +41,6 @@ export const INITIAL_COMMANDS = [
     label: "Search Workspaces",
     description: "Quickly switch between teams",
     icon: MagnifyingGlassIcon,
-    shortcut: ["⌘", "S"],
     children: "workspaces",
   },
 
@@ -122,6 +121,7 @@ export const INITIAL_COMMANDS = [
     description: "Sign out of your account",
     icon: ArrowLeftStartOnRectangleIcon,
     confirm: "logout",
+    dangerous: true,
   },
 ];
 

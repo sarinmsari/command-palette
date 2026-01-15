@@ -5,7 +5,8 @@ import { ref } from 'vue';
 import { useKeyboardShortcut } from '../../composables/useKeyboardShortcut';
 import { useCommandPalette } from '../../composables/useCommandPalette';
 import _ from 'lodash';
-import ConfirmModal from '../ConfirmModal.vue';
+import ConfirmModal from '../common/ConfirmModal.vue';
+import ClickButton from '../common/ClickButtonWrapper.vue';
 
 const emit = defineEmits(['close']);
 
@@ -57,9 +58,31 @@ useKeyboardShortcut({
     backspace: {
         mod: false,
         handler: (event) => {
-            if (searchQuery.value === '' && currentView.value !== 'root') {
+            if (showConfirmModal.value) {
+                showConfirmModal.value = false;
+                return;
+            }else if (searchQuery.value === '' && currentView.value !== 'root') {
                 event.preventDefault();
                 popView();
+            }
+        }
+    },
+    arrowleft: {
+        mod: false,
+        handler: (event) => {
+            if (!showConfirmModal.value && searchQuery.value === '' && currentView.value !== 'root') {
+                event.preventDefault();
+                popView();
+            }
+        }
+    },
+    arrowright: {
+        mod: false,
+        handler: (event) => {
+            const selectedCommand = filteredCommands.value[listRef.value?.selectedIndex || 0];
+            if (!showConfirmModal.value && searchQuery.value === '' && selectedCommand?.children) {
+                event.preventDefault();
+                pushView(selectedCommand.children);
             }
         }
     }
@@ -145,7 +168,10 @@ const handleConfimation = () => {
         <!-- command palette modal -->
         <div v-else key="command_palette"
             class="bg-background w-full md:w-[600px] rounded-2xl overflow-hidden border border-highlight">
-            <PaletteInput v-model="searchQuery" class="border-b-2 border-solid border-highlight" />
+            <div class="flex items-center justify-center px-4 gap-2 border-b-2 border-solid border-highlight">
+                <PaletteInput v-model="searchQuery" class="" />
+                <ClickButton @click.prevent="$emit('close')" class="bg-highlight hover:bg-highlight/80 h-fit w-fit py-1 px-2 rounded-md text-[10px] md:text-xs">Esc</ClickButton>
+            </div>
             <PaletteList ref="listRef" :commands="filteredCommands" @execute="handleExecution" />
         </div>
     </div>

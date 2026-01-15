@@ -47,7 +47,7 @@ const executeSelected = () => {
   if (selectedCommand) {
     emit('execute', selectedCommand);
     pressedIndex.value = selectedIndex.value
-
+    
     setTimeout(() => {
       pressedIndex.value = null
     }, 60)
@@ -58,6 +58,7 @@ defineExpose({
   selectNext,
   selectPrev,
   executeSelected,
+  selectedIndex,
 });
 </script>
 
@@ -68,11 +69,11 @@ defineExpose({
     <TransitionGroup name="list" tag="ul" class="flex relative list-none flex-col">
 
       <PaletteItem v-for="(command, index) in commands" :key="command.id" :command="command"
-        :isActive="index === selectedIndex" @click="$emit('execute', command)" @mouseenter="selectedIndex = index"
+        :isActive="index === selectedIndex" @click="$emit('execute', command)" @mousemove="selectedIndex = index"
         :class="[pressedIndex === index ? 'scale-[0.99]' : '']" />
 
-      <li>
-        <PaletteEmpty v-if="commands.length === 0" key="empty" />
+      <li  key="empty">
+        <PaletteEmpty v-if="commands.length === 0" />
       </li>
     </TransitionGroup>
   </div>

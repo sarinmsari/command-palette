@@ -11,7 +11,7 @@ export function useCommandPalette() {
     () => viewStack.value[viewStack.value.length - 1]
   );
 
-  const updateFilteredList = _.debounce(() => {
+  const filterList = () => {
     const query = searchQuery.value.toLowerCase().trim();
 
     const activeSource =
@@ -28,10 +28,17 @@ export function useCommandPalette() {
           (cmd.description && cmd.description.toLowerCase().includes(query))
       );
     }
-  }, 300); // debounce for 250ms
+  };
 
-  watch([searchQuery, currentView], () => {
-    updateFilteredList();
+  const deboundedFilter = _.debounce(filterList, 300); // 300ms debounce
+
+  // Watchers
+  watch(searchQuery, () => {
+    deboundedFilter();
+  });
+  watch(currentView, () => {
+    deboundedFilter.cancel();
+    filterList();
   });
 
   // push submenu view onto the stack

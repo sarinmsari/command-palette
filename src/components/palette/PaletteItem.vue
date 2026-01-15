@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
+import ClickButton from '../common/ClickButtonWrapper.vue';
 
 const props = defineProps({
     command: { type: Object, required: true },
@@ -12,9 +13,7 @@ const pressed = ref(false);
 
 <template>
     <li :class="{ 'is-active': isActive }" class="py-1">
-        <div tabindex="0" role="button" @mousedown="pressed = true" @mouseup="pressed = false"
-            @mouseleave="pressed = false" :class="[isActive ? 'bg-highlight' : '', pressed ? 'scale-[0.99]' : '']"
-            class="text-start flex justify-between gap-4 px-4 py-2 rounded-xl cursor-pointer outline-none focus:outline-none transform-gpu duration-100 ease-in-out">
+        <ClickButton :class="[isActive ? 'bg-highlight' : '']" class="w-full text-start flex justify-between gap-4 px-4 py-2 rounded-xl">
             <div :class="[command?.dangerous ? 'text-danger' : 'text-white']" class="flex items-start gap-4">
                 <div>
                     <component :is="command.icon" class="w-4 h-4 mt-[3px]" />
@@ -32,6 +31,6 @@ const pressed = ref(false);
             <div v-else-if="command.children" class="flex items-center">
                 <ChevronRightIcon :class="[isActive ? 'text-white' : 'text-white/50']" class="w-3 h-3 md:w-4 md:h-4" />
             </div>
-        </div>
+        </ClickButton>
     </li>
 </template>
